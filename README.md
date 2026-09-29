@@ -35,6 +35,13 @@ x_q variando
 y_q = -128
 y ≈ -1.118
 ```
+O `model.cc` originalmente utilizado já continha um modelo quantizado em INT8, pois fazia parte do exemplo `hello_world` do TensorFlow Lite Micro. Entretanto, esse arquivo não correspondia exatamente ao modelo treinado e quantizado no Google Colab utilizado como referência no experimento.
+
+Para eliminar essa diferença, o modelo `hello_world_int8.tflite`, previamente validado no Colab, foi convertido novamente para `model.cc` e incorporado ao projeto durante um novo build.
+
+Após essa substituição, a saída do modelo deixou de permanecer constante e passou a variar corretamente.
+
+A equivalência entre o modelo validado no Colab e o modelo embarcado foi confirmada comparando o tamanho dos arquivos e o hash SHA-256 dos bytes do `.tflite` com os bytes armazenados no novo `model.cc`.
 
 Para eliminar a dúvida sobre qual modelo estava realmente embarcado, o `model.cc` original foi substituído por um novo arquivo gerado a partir do:
 
