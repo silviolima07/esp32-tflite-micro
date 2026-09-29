@@ -1,0 +1,26 @@
+dependencies:
+  esp-tflite-micro:
+    dependencies: []
+    source:
+      path: components/esp-tflite-micro
+      type: local
+    version: 1.4.1
+  espressif/esp-nn:
+    dependencies:
+    - name: idf
+      version: '>=5.1'
+    source:
+      path: components/esp-nn
+      type: local
+    version: 1.4.1
+  idf:
+    source:
+      type: idf
+    version: 6.1.0
+direct_dependencies:
+- espressif/esp-nn
+- espressif/esp-tflite-micro
+- idf
+manifest_hash: 656d97eaba82d9f5074081b05e9b58eb895565e4ffd3d6b467ea7261ef7ff747
+target: esp32s3
+version: 3.0.0

@@ -1,0 +1,193 @@
+/* Copyright 2020 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+#include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
+#include "tensorflow/lite/micro/micro_interpreter.h"
+#include "tensorflow/lite/micro/system_setup.h"
+#include "tensorflow/lite/schema/schema_generated.h"
+
+#include "main_functions.h"
+#include "model.h"
+#include "constants.h"
+#include "output_handler.h"
+
+// Globals, used for compatibility with Arduino-style sketches.
+namespace {
+
+const tflite::Model* model = nullptr;
+tflite::MicroInterpreter* interpreter = nullptr;
+
+TfLiteTensor* input = nullptr;
+TfLiteTensor* output = nullptr;
+
+int inference_count = 0;
+
+// Memória utilizada pelo TensorFlow Lite Micro.
+constexpr int kTensorArenaSize = 2000;
+uint8_t tensor_arena[kTensorArenaSize];
+
+}  // namespace
+
+
+// The name of this function is important for Arduino compatibility.
+void setup() {
+
+  MicroPrintf("Iniciando TensorFlow Lite Micro - MODELO FLOAT");
+
+  // Map the model into a usable data structure.
+  model = tflite::GetModel(g_model);
+
+  if (model->version() != TFLITE_SCHEMA_VERSION) {
+
+    MicroPrintf(
+        "Model provided is schema version %d not equal to supported version %d.",
+        model->version(),
+        TFLITE_SCHEMA_VERSION
+    );
+
+    return;
+  }
+
+
+  // O modelo Hello World utiliza operações FullyConnected.
+  static tflite::MicroMutableOpResolver<1> resolver;
+
+  if (resolver.AddFullyConnected() != kTfLiteOk) {
+
+    MicroPrintf("Erro ao adicionar FullyConnected");
+
+    return;
+  }
+
+
+  // Cria o interpretador TensorFlow Lite Micro.
+  static tflite::MicroInterpreter static_interpreter(
+      model,
+      resolver,
+      tensor_arena,
+      kTensorArenaSize
+  );
+
+  interpreter = &static_interpreter;
+
+
+  // Aloca os tensores dentro da tensor arena.
+  TfLiteStatus allocate_status = interpreter->AllocateTensors();
+
+  if (allocate_status != kTfLiteOk) {
+
+    MicroPrintf("AllocateTensors() failed");
+
+    return;
+  }
+
+
+  // Obtém os tensores de entrada e saída.
+  input = interpreter->input(0);
+  output = interpreter->output(0);
+
+
+  // Apenas para diagnóstico.
+  MicroPrintf(
+      "Input tensor type: %d",
+      static_cast<int>(input->type)
+  );
+
+  MicroPrintf(
+      "Output tensor type: %d",
+      static_cast<int>(output->type)
+  );
+
+
+  // Reinicia o contador de inferências.
+  inference_count = 0;
+
+  MicroPrintf("Setup concluido");
+}
+
+
+// The name of this function is important for Arduino compatibility.
+void loop() {
+
+  // Calcula a posição atual dentro de um ciclo.
+  float position =
+      static_cast<float>(inference_count) /
+      static_cast<float>(kInferencesPerCycle);
+
+
+  // Gera o valor de X.
+  //
+  // Normalmente o intervalo utilizado pelo exemplo é:
+  //
+  // 0 -> 2 * PI
+  //
+  float x = position * kXrange;
+
+
+  // ============================================================
+  // MODELO FLOAT
+  //
+  // Não existe quantização aqui.
+  // O próprio valor float é colocado diretamente no tensor.
+  // ============================================================
+
+  input->data.f[0] = x;
+
+
+  // Executa a inferência.
+  TfLiteStatus invoke_status = interpreter->Invoke();
+
+  if (invoke_status != kTfLiteOk) {
+
+    MicroPrintf(
+        "Invoke failed on x: %f",
+        static_cast<double>(x)
+    );
+
+    return;
+  }
+
+
+  // ============================================================
+  // MODELO FLOAT
+  //
+  // A saída também é lida diretamente como float.
+  // ============================================================
+
+  float y = output->data.f[0];
+
+
+  // Debug adicional.
+  MicroPrintf(
+      "FLOAT -> x=%f y=%f",
+      static_cast<double>(x),
+      static_cast<double>(y)
+  );
+
+
+  // Mantemos o output_handler original do exemplo.
+  HandleOutput(x, y);
+
+
+  // Incrementa o contador de inferências.
+  inference_count += 1;
+
+
+  // Ao completar um ciclo, volta para zero.
+  if (inference_count >= kInferencesPerCycle) {
+
+    inference_count = 0;
+  }
+}
