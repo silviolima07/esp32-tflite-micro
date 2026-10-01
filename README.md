@@ -1,6 +1,6 @@
 # ESP32-S3 + TensorFlow Lite Micro + Wokwi — Hello World INT8
 
-Projeto da **Atividade Avaliativa Prática 4/6**
+## Projeto da **Atividade Avaliativa Prática 4/6**
 
 - reproduzindo o exemplo *Hello World* do TensorFlow Lite Micro no ESP32-S3 com ESP-IDF e Wokwi.
 
