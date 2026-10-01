@@ -1,4 +1,5 @@
-# ESP32-S3 + TensorFlow Lite Micro + Wokwi — Hello World INT8
+# ESP32-S3 + TensorFlow Lite Micro + Wokwi
+# Hello World INT8
 
 ## Projeto da **Atividade Avaliativa Prática 4/6**
 
@@ -189,7 +190,7 @@ Resultado próximo ao Colab
 - [`docs/guia_tflite_micro.md`](docs/guia_tflite_micro.md)
 - [`docs/template_novos_projetos.md`](docs/template_novos_projetos.md)
 
-## Projeto Bônus — Classificação de Umidade com DHT22
+# Projeto Bônus — Classificação de Umidade com DHT22
 
 Como extensão da atividade principal, será desenvolvida uma nova aplicação utilizando o sensor **DHT22** e um novo dataset, atendendo ao requisito do ponto extra da atividade prática.
 
@@ -246,5 +247,13 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 
 ### Wowki
 
-
 ![adequado](img/dht22_classificar_adequado.png)
+
+![adequado](img/dht22_classificar_alerta.png)
+
+![adequado](img/dht22_classificar_atencao.png)
+
+## Documentação
+
+- [`docs/DOCUMENTACAO_PROBLEMAS_DHT22_TINYML.md`](docs/DOCUMENTACAO_PROBLEMAS_DHT22_TINYML.md)
+
