@@ -244,6 +244,10 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 
 ![int8](img/int8.png)
 
+### Comparacao
+
+![comparacao](img/Comparacao.png)
+
 
 ### Wowki
 
