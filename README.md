@@ -35,6 +35,8 @@ x_q variando
 y_q = -128
 y ≈ -1.118
 ```
+
+### Problema com model.cc
 O `model.cc` originalmente utilizado já continha um modelo quantizado em INT8, pois fazia parte do exemplo `hello_world` do TensorFlow Lite Micro. Entretanto, esse arquivo não correspondia exatamente ao modelo treinado e quantizado no Google Colab utilizado como referência no experimento.
 
 Para eliminar essa diferença, o modelo `hello_world_int8.tflite`, previamente validado no Colab, foi convertido novamente para `model.cc` e incorporado ao projeto durante um novo build.
