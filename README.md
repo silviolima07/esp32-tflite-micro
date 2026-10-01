@@ -167,6 +167,11 @@ ESP32-S3 / Wokwi
         ↓
 Resultado próximo ao Colab
 ```
+### Wokwi
+
+
+![hello_world](img/inferencia.jpg)
+
 
 ## Principais aprendizados
 
