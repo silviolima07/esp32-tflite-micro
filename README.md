@@ -237,3 +237,9 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 ### Modelo Quantizado 
 
 ![int8](img/int8.png)
+
+
+### Wowki
+
+
+![adequado](img/dht22_classificar_adequado.png)
