@@ -207,6 +207,8 @@ ALERTA umidade < 30% ou umidade > 70% ou temperatura > 35 °C
 
 Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop/blob/main/data/supplied_training_data.csv
 
+### Histograma
+
 <img width="848" height="374" alt="image" src="https://github.com/user-attachments/assets/3c23bb37-cd5b-47c5-bd3b-7640b8a0b040" />
 
 ### Fluxo previsto
@@ -215,7 +217,7 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 
 ![rede neural](img/rede_neural2.png)
 
-### Próximas etapas
+### Etapas executadas
 
 1. gerar os dados das três classes;
 2. explorar os dados
@@ -227,3 +229,11 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 8. gerar um novo `model.cc`;
 9. integrar o modelo ao ESP32-S3;
 10. executar a classificação no Wokwi.
+
+### Modelo original 
+
+![float32](img/float32.png)
+
+### Modelo Quantizado 
+
+![int8](img/int8.png)
