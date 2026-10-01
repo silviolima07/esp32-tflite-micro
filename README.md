@@ -211,30 +211,14 @@ Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop
 
 ### Fluxo previsto
 
+![rede neural](img/rede_neural.png)
 
-
-
-### Estrutura inicial do dataset
-
-```text
-dataset/
-├── em_pe.csv
-├── deitada.csv
-└── queda.csv
-```
-
-Cada registro bruto poderá conter:
-
-```csv
-timestamp,ax,ay,az,gx,gy,gz,classe
-0.00,0.02,-0.01,1.00,0.5,-0.2,0.1,EM_PE
-0.02,0.03,-0.02,0.99,0.6,-0.1,0.2,EM_PE
-```
+![rede neural](img/rede_neural2.png)
 
 ### Próximas etapas
 
 1. gerar os dados das três classes;
-2. organizar as leituras em janelas;
+2. explorar os dados
 3. extrair características relevantes;
 4. treinar o modelo no Colab;
 5. avaliar o modelo FLOAT32;
