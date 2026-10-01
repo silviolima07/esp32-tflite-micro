@@ -179,3 +179,107 @@ Resultado próximo ao Colab
 
 - [`docs/guia_tflite_micro.md`](docs/guia_tflite_micro.md)
 - [`docs/template_novos_projetos.md`](docs/template_novos_projetos.md)
+
+## Projeto Bônus — Classificação de postura e possível queda com MPU6050
+
+Como extensão da atividade principal, será desenvolvida uma nova aplicação utilizando o sensor **MPU6050** e um novo dataset, atendendo ao requisito do ponto extra da atividade prática.
+
+### Objetivo
+
+Desenvolver um modelo TinyML capaz de classificar o estado de uma pessoa a partir dos dados do acelerômetro e do giroscópio do MPU6050.
+
+As classes inicialmente definidas são:
+
+```text
+0 = EM_PE
+1 = DEITADA
+2 = QUEDA
+```
+
+O objetivo é representar um cenário de monitoramento assistivo, no qual o sistema embarcado identifica a postura da pessoa e possíveis eventos de queda.
+
+### Dados utilizados
+
+O MPU6050 fornece seis variáveis principais:
+
+```text
+ax, ay, az
+gx, gy, gz
+```
+
+onde:
+
+- `ax`, `ay`, `az` representam a aceleração nos três eixos;
+- `gx`, `gy`, `gz` representam a velocidade angular medida pelo giroscópio.
+
+### Janela de observação
+
+A classificação não será feita utilizando apenas uma leitura isolada.
+
+Uma queda é um evento que ocorre ao longo do tempo, portanto serão utilizadas janelas contendo várias amostras consecutivas do sensor.
+
+Configuração inicial proposta:
+
+```text
+Frequência de amostragem: 50 Hz
+Janela: 2 segundos
+Amostras por janela: 100
+```
+
+Cada janela conterá:
+
+```text
+100 amostras × 6 variáveis
+```
+
+### Fluxo previsto
+
+```text
+MPU6050
+   ↓
+ax, ay, az, gx, gy, gz
+   ↓
+janela temporal
+   ↓
+pré-processamento / extração de características
+   ↓
+modelo de classificação
+   ↓
+quantização INT8
+   ↓
+TensorFlow Lite Micro
+   ↓
+ESP32-S3
+   ↓
+EM_PE / DEITADA / QUEDA
+```
+
+### Estrutura inicial do dataset
+
+```text
+dataset/
+├── em_pe.csv
+├── deitada.csv
+└── queda.csv
+```
+
+Cada registro bruto poderá conter:
+
+```csv
+timestamp,ax,ay,az,gx,gy,gz,classe
+0.00,0.02,-0.01,1.00,0.5,-0.2,0.1,EM_PE
+0.02,0.03,-0.02,0.99,0.6,-0.1,0.2,EM_PE
+```
+
+### Próximas etapas
+
+1. gerar os dados das três classes;
+2. organizar as leituras em janelas;
+3. extrair características relevantes;
+4. treinar o modelo no Colab;
+5. avaliar o modelo FLOAT32;
+6. quantizar para INT8;
+7. validar o `.tflite` no Colab;
+8. gerar um novo `model.cc`;
+9. integrar o modelo ao ESP32-S3;
+10. executar a classificação no Wokwi.

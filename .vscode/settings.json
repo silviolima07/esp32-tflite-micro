@@ -1,3 +1,4 @@
 {
-    "idf.currentSetup": "C:\\esp\\.espressif\\v6.1\\esp-idf"
+    "idf.currentSetup": "C:\\esp\\.espressif\\v6.1\\esp-idf",
+    "cmake.sourceDirectory": "D:/EMBARCADOS/esp32-tflite-micro/hello_world"
 }
