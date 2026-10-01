@@ -1,6 +1,8 @@
 # ESP32-S3 + TensorFlow Lite Micro + Wokwi — Hello World INT8
 
-Projeto da **Atividade Avaliativa Prática 4/6**, reproduzindo o exemplo *Hello World* do TensorFlow Lite Micro no ESP32-S3 com ESP-IDF e Wokwi.
+Projeto da **Atividade Avaliativa Prática 4/6**
+
+- reproduzindo o exemplo *Hello World* do TensorFlow Lite Micro no ESP32-S3 com ESP-IDF e Wokwi.
 
 ## Objetivo
 
@@ -182,79 +184,35 @@ Resultado próximo ao Colab
 - [`docs/guia_tflite_micro.md`](docs/guia_tflite_micro.md)
 - [`docs/template_novos_projetos.md`](docs/template_novos_projetos.md)
 
-## Projeto Bônus — Classificação de postura e possível queda com MPU6050
+## Projeto Bônus — Classificação de Umidade com DHT22
 
-Como extensão da atividade principal, será desenvolvida uma nova aplicação utilizando o sensor **MPU6050** e um novo dataset, atendendo ao requisito do ponto extra da atividade prática.
+Como extensão da atividade principal, será desenvolvida uma nova aplicação utilizando o sensor **DHT22** e um novo dataset, atendendo ao requisito do ponto extra da atividade prática.
 
 ### Objetivo
 
-Desenvolver um modelo TinyML capaz de classificar o estado de uma pessoa a partir dos dados do acelerômetro e do giroscópio do MPU6050.
+Desenvolver um modelo TinyML capaz de classificar a umidade a partir de temperatura e umidade coletados.
 
 As classes inicialmente definidas são:
 
 ```text
-0 = EM_PE
-1 = DEITADA
-2 = QUEDA
-```
 
-O objetivo é representar um cenário de monitoramento assistivo, no qual o sistema embarcado identifica a postura da pessoa e possíveis eventos de queda.
+ADEQUADO umidade entre 40% e 60% e temperatura < 32 °C
+
+ATENÇÃO umidade entre 30% e 40% ou entre 60% e 70% ou temperatura entre 32 e 35 °C
+
+ALERTA umidade < 30% ou umidade > 70% ou temperatura > 35 °C
+```
 
 ### Dados utilizados
 
-O MPU6050 fornece seis variáveis principais:
+Dataset público: https://github.com/vineethraik/esp32-tinyml-fire-risk-workshop/blob/main/data/supplied_training_data.csv
 
-```text
-ax, ay, az
-gx, gy, gz
-```
-
-onde:
-
-- `ax`, `ay`, `az` representam a aceleração nos três eixos;
-- `gx`, `gy`, `gz` representam a velocidade angular medida pelo giroscópio.
-
-### Janela de observação
-
-A classificação não será feita utilizando apenas uma leitura isolada.
-
-Uma queda é um evento que ocorre ao longo do tempo, portanto serão utilizadas janelas contendo várias amostras consecutivas do sensor.
-
-Configuração inicial proposta:
-
-```text
-Frequência de amostragem: 50 Hz
-Janela: 2 segundos
-Amostras por janela: 100
-```
-
-Cada janela conterá:
-
-```text
-100 amostras × 6 variáveis
-```
+<img width="848" height="374" alt="image" src="https://github.com/user-attachments/assets/3c23bb37-cd5b-47c5-bd3b-7640b8a0b040" />
 
 ### Fluxo previsto
 
-```text
-MPU6050
-   ↓
-ax, ay, az, gx, gy, gz
-   ↓
-janela temporal
-   ↓
-pré-processamento / extração de características
-   ↓
-modelo de classificação
-   ↓
-quantização INT8
-   ↓
-TensorFlow Lite Micro
-   ↓
-ESP32-S3
-   ↓
-EM_PE / DEITADA / QUEDA
-```
+
+
 
 ### Estrutura inicial do dataset
 
